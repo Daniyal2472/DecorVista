@@ -1,6 +1,154 @@
 <?php
-include('header.php');
+include __DIR__ . '/../connection.php';
+if (!isset($_SESSION['role'])) {
+  $_SESSION['role'] = ''; // Set to an empty string if not defined
+}
 ?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+  
+    <title>Decorvista</title>
+  
+    <!-- Slider Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
+  
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+  
+    <!-- Fonts Style -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Poppins:400,700&display=swap" rel="stylesheet" />
+  
+    <!-- Custom Styles for This Template -->
+    <link href="css/style.css" rel="stylesheet" />
+  
+    <!-- Responsive Style -->
+    <link href="css/responsive.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  </head>
+
+<body >
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg custom_nav-container">
+      <a class="navbar-brand" href="index.php">
+        <img src="images/logo a.png" alt="" />
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.php"> About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="shop.php">Shop </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.php">Contact us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="gallery.php">Our Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="interior_design.php">Interior Design </a>
+          </li>
+        </ul>
+
+        <!-- Dropdown button with z-index for proper layering -->
+        <div class="dropdown" style="position: relative; z-index: 1000;">
+  <a href="#" class="dropdown-toggle" style="color: black; display: flex; align-items: center;" id="loginDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <img src="images/user.png" alt="" style="width: 20px; margin-right: 10px; filter: brightness(0) saturate(100%) invert(53%) sepia(93%) saturate(544%) hue-rotate(74deg) brightness(94%) contrast(89%);">
+  </a>
+  <div class="dropdown-menu mt-4" aria-labelledby="loginDropdown" style="min-width: 180px; padding: 15px; background-color: #f1f1f1; box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); border-radius: 8px; transition: all 0.3s ease; opacity: 0; transform: translateY(-10px);">
+  <?php
+  if ($_SESSION['role'] !== 'User') {
+  ?>  
+  <a class="dropdown-item" href="login.php" style="color: #222; padding: 10px 15px; margin-bottom: 5px; border-radius: 5px; background-color: transparent; font-weight: bold; display: block; transition: all 0.3s ease;">
+      <i class="fas fa-sign-in-alt"></i> Login
+    </a>
+    <a class="dropdown-item" href="register.php" style="color: #222; padding: 10px 15px; margin-bottom: 5px; border-radius: 5px; background-color: transparent; font-weight: bold; display: block; transition: all 0.3s ease;">
+      <i class="fas fa-user-plus"></i> Register
+    </a>
+    <?php }?>
+    <?php
+  if ($_SESSION['role'] === 'User') {
+  ?>  
+  <a class="dropdown-item" href="/DecorVista/logout.php" style="color: #222; padding: 10px 15px; margin-bottom: 5px; border-radius: 5px; background-color: transparent; font-weight: bold; display: block; transition: all 0.3s ease;">
+      <i class="fas fa-sign-in-alt"></i> Logout
+    </a><?php }?>
+
+
+    
+    <a class="dropdown-item" href="cart.php" style="color: #222; padding: 10px 15px; margin-bottom: 5px; border-radius: 5px; background-color: transparent; font-weight: bold; display: block; transition: all 0.3s ease;">
+      <i class="fas fa-shopping-cart"></i> Your Cart
+    </a>
+    <a class="dropdown-item" href="Dashboard.php" style="color: #222; padding: 10px 15px; margin-bottom: 5px; border-radius: 5px; background-color: transparent; font-weight: bold; display: block; transition: all 0.3s ease;">
+      <i class="fas fa-tachometer-alt"></i> Dashboard
+    </a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<!-- Add inline script to handle dropdown animation -->
+<script>
+  document.querySelector('#loginDropdown').addEventListener('click', function(e) {
+    e.preventDefault();
+    const dropdownMenu = this.nextElementSibling;
+    if (dropdownMenu.style.opacity === '1') {
+      dropdownMenu.style.opacity = '0';
+      dropdownMenu.style.transform = 'translateY(-10px)';
+    } else {
+      dropdownMenu.style.opacity = '1';
+      dropdownMenu.style.transform = 'translateY(0)';
+    }
+  });
+</script>
+
+
+        <!-- Search form -->
+        <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
+          <button class="btn my-2 my-sm-0 nav_search-btn" type="submit"></button>
+        </form>
+      </div>
+
+      <div>
+        <div class="custom_menu-btn">
+          <button>
+            <span class="s-1"></span>
+            <span class="s-2"></span>
+            <span class="s-3"></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+    <!-- end header section -->
+
     <!-- slider section -->
     <section class="slider_section ">
       <div class="play_btn">
@@ -42,10 +190,10 @@ include('header.php');
                       At DecorVista, we specialize in creating stylish and functional furniture that enhances the beauty and comfort of your home. Our wide range of carefully crafted pieces caters to diverse tastes, ensuring quality and design excellence. Transform your space with DecorVista’s unique, elegant, and affordable furniture solutions.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn-1">
+                      <a href="shop.php" class="btn-1">
                         Read More
                       </a>
-                      <a href="" class="btn-2">
+                      <a href="contact.php" class="btn-2">
                         Contact us
                       </a>
                     </div>
@@ -71,10 +219,10 @@ include('header.php');
                     <p> At DecorVista, we specialize in creating stylish and functional furniture that enhances the beauty and comfort of your home. Our wide range of carefully crafted pieces caters to diverse tastes, ensuring quality and design excellence. Transform your space with DecorVista’s unique, elegant, and affordable furniture solutions.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn-1">
+                      <a href="shop.php" class="btn-1">
                         Read More
                       </a>
-                      <a href="" class="btn-2">
+                      <a href="contact.php" class="btn-2">
                         Contact us
                       </a>
                     </div>
@@ -101,10 +249,10 @@ include('header.php');
                     At DecorVista, we specialize in creating stylish and functional furniture that enhances the beauty and comfort of your home. Our wide range of carefully crafted pieces caters to diverse tastes, ensuring quality and design excellence. Transform your space with DecorVista’s unique, elegant, and affordable furniture solutions.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn-1">
+                      <a href="shop.php" class="btn-1">
                         Read More
                       </a>
-                      <a href="" class="btn-2">
+                      <a href="contact.php" class="btn-2">
                         Contact us
                       </a>
                     </div>
@@ -128,7 +276,7 @@ include('header.php');
                       </span>
                     </h1>
                     <p>
-                    At DecorVista, we specialize in creating stylish and functional furniture that enhances the beauty and comfort of your home. Our wide range of carefully crafted pieces caters to diverse tastes, ensuring quality and design excellence. Transform your space with DecorVista’s unique, elegant, and affordable furniture solutions.
+                    At DecorVista,  specialize in creating stylish and functional furniture that enhances the beauty and comfort of your home. Our wide range of carefully crafted pieces caters to diverse tastes, ensuring quality and design excellence. Transform your space with DecorVista’s unique, elegant, and affordable furniture solutions.
                     </p>
                     <div class="btn-box">
                       <a href="" class="btn-1">
@@ -155,41 +303,11 @@ include('header.php');
   </div>
 
 
-  <!-- about section -->
 
-  <section class="about_section layout_padding">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="detail-box">
-            <div class="heading_container">
-              <h2>
-                About Us
-              </h2>
-
-            </div>
-            <p>
-              At DecorVista, we specialize in creating stylish and functional furniture that enhances the beauty and comfort of your home. Our wide range of carefully crafted pieces caters to diverse tastes, ensuring quality and design excellence. Transform your space with DecorVista’s unique, elegant, and affordable furniture solutions.
-            </p>
-            <a href="">
-              Read More
-            </a>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="img-box">
-            <img src="images/about-img.png" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- end about section -->
 
   <!-- trending section -->
 
-  <section class="trending_section layout_padding">
+  <section class="trending_section layout_padding pt-5">
     <div id="accordion">
       <div class="container">
         <div class="row">
@@ -211,7 +329,7 @@ include('header.php');
                   <hr>
                   <div class="t-name">
                     <h5>
-                      Chairs
+                    Living Rooms
                     </h5>
                   </div>
                 </div>
@@ -225,7 +343,7 @@ include('header.php');
                   <hr>
                   <div class="t-name">
                     <h5>
-                      Tables
+                    Bedrooms 
                     </h5>
                   </div>
                 </div>
@@ -239,7 +357,7 @@ include('header.php');
                   <hr>
                   <div class="t-name">
                     <h5>
-                      Bads
+                    Kitchens
                     </h5>
                   </div>
                 </div>
@@ -253,7 +371,7 @@ include('header.php');
                   <hr>
                   <div class="t-name">
                     <h5>
-                      Furnitures
+                    Offices
                     </h5>
                   </div>
                 </div>
@@ -353,6 +471,125 @@ include('header.php');
 
   <!-- end trending section -->
 
+
+    <!-- brand section -->
+  <!-- brand section -->
+  <section class="brand_section layout_padding">
+  <div class="container">
+    <div class="heading_container">
+      <h2>Our Products</h2>
+    </div>
+    <div class="brand_container layout_padding2">
+      <?php
+      // SQL query to fetch the top 4 products from the 'products' table, ordered by 'product_id'
+      $sql = "SELECT * FROM `products` ORDER BY `product_id` DESC LIMIT 3";
+      $result = $con->query($sql);
+
+      // Check if there are any products returned from the query
+      if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          // Extract product details (adjust the column names based on your database schema)
+          $product_id = $row['product_id'];  // Assuming 'product_id' is the product's unique identifier
+          $product_name = $row['product_name'];  // Assuming 'product_name' is the name of the product
+          $product_price = $row['price']; // Assuming 'price' is the price of the product
+          $product_image = $row['image_url']; // Assuming 'image_url' is the path to the product image
+      ?>
+      <div class="box">
+        <!-- Make the whole card clickable and redirect to 'product_detail.php' with the product's ID -->
+        <a href="product_detail.php?id=<?php echo $product_id; ?>">
+        <div class="img-box">
+              <!-- Display the product image -->
+              <img src="../admin/uploads/products/<?php echo $row['image_url']; ?>" alt="Product Image">
+            </div>
+          <div class="detail-box">
+            <!-- Display the product price -->
+            <h6 class="price pt-4">
+              PKR: <?php echo htmlspecialchars($product_price); ?>
+            </h6>
+            <!-- Display the product name -->
+            <h6>
+              <?php echo htmlspecialchars($product_name); ?>
+            </h6>
+          </div>
+        </a>
+      </div>
+      <?php
+        }
+      } else {
+        echo "<p>No products found.</p>";
+      }
+      ?>
+    </div>
+  </div>
+</section>
+
+  <!-- end brand section -->
+
+  <!-- end brand section -->
+
+  <!-- why choose us -->
+  <section class="ftco-section ftco-no-pt ftco-no-pb" style="padding: 100px 0;">
+    <div class="container">
+        <div class="row no-gutters">
+            <!-- Text Section -->
+            <div class="col-md-7" style="padding: 0; box-sizing: border-box;">
+                <div class="heading-section">
+                    
+                    <div class="heading_container">
+      <h2>Why Choose Us?</h2>
+    </div>
+                    <hr style="border-top: 2px solid #DEAD6F; width: 50%; margin-bottom: 2rem;">
+                </div>
+                <div class="row">
+                    <!-- Service 1 -->
+                    <div class="col-md-6" style="margin-bottom: 20px;">
+                        <div class="d-flex align-items-center" style="display: flex; align-items: center;">
+                            <div class="text" style="flex: 1;">
+                                <h4 style="font-size: 1.5rem; color: #222; margin-bottom: 0.5rem;">Custom Furniture Design</h4>
+                                <p style="font-size: 1rem; color: #555;">We specialize in creating bespoke furniture tailored to your style and space, ensuring your home reflects your personality.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="col-md-6" style="margin-bottom: 20px;">
+                        <div class="d-flex align-items-center" style="display: flex; align-items: center;">
+                            <div class="text" style="flex: 1;">
+                                <h4 style="font-size: 1.5rem; color: #222; margin-bottom: 0.5rem;">Quality Craftsmanship</h4>
+                                <p style="font-size: 1rem; color: #555;">Our furniture is crafted from high-quality materials, ensuring durability and longevity for all your furniture needs.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="col-md-6" style="margin-bottom: 20px;">
+                        <div class="d-flex align-items-center" style="display: flex; align-items: center;">
+                            <div class="text" style="flex: 1;">
+                                <h4 style="font-size: 1.5rem; color: #222; margin-bottom: 0.5rem;">Sustainable Practices</h4>
+                                <p style="font-size: 1rem; color: #555;">We are committed to using sustainable materials and eco-friendly practices in our furniture production to protect our planet.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Service 4 -->
+                    <div class="col-md-6" style="margin-bottom: 20px;">
+                        <div class="d-flex align-items-center" style="display: flex; align-items: center;">
+                            <div class="text" style="flex: 1;">
+                                <h4 style="font-size: 1.5rem; color: #222; margin-bottom: 0.5rem;">Exceptional Customer Service</h4>
+                                <p style="font-size: 1rem; color: #555;">Our team is dedicated to providing exceptional service and support, helping you find the perfect furniture for your home.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5" style="padding: 0;">
+                <div class="img d-flex align-items-center justify-content-center"
+                     style="background-image: url('https://atlas-content-cdn.pixelsquid.com/stock-images/mid-century-modern-dining-chair-mdaWQnA-600.jpg'); background-size: cover; background-position: center; height: 400px; width: 100%;">
+                    <!-- Image section -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
   <!-- discount section -->
 
   <section class="discount_section  layout_padding">
@@ -368,7 +605,7 @@ include('header.php');
             </h2>
 
             <div class="">
-              <a href="">
+              <a href="shop.php">
                 Buy Now
               </a>
             </div>
@@ -386,261 +623,20 @@ include('header.php');
 
   <!-- end discount section -->
 
-  <!-- brand section -->
 
-  <section class="brand_section">
-    <div class="container">
-      <div class="heading_container">
-        <h2>
-          Featured Brands
-        </h2>
-      </div>
-      <div class="brand_container layout_padding2">
-        <div class="box">
-          <a href="">
-            <div class="new">
-              <h5>
-                New
-              </h5>
-            </div>
-            <div class="img-box">
-              <img src="images/slider-img.png" alt="">
-            </div>
-            <div class="detail-box">
-              <h6 class="price">
-                $100
-              </h6>
-              <h6>
-                Chair
-              </h6>
-            </div>
-          </a>
-        </div>
-        <div class="box">
-          <a href="">
-            <div class="img-box">
-              <img src="images/slider-img.png" alt="">
-            </div>
-            <div class="detail-box">
-              <h6 class="price">
-                $100
-              </h6>
-              <h6>
-                Chair
-              </h6>
-            </div>
-          </a>
-        </div>
-        <div class="box">
-          <a href="">
-            <div class="img-box">
-              <img src="images/slider-img.png" alt="">
-            </div>
-            <div class="detail-box">
-              <h6 class="price">
-                $100
-              </h6>
-              <h6>
-                Chair
-              </h6>
-            </div>
-          </a>
-        </div>
-        <div class="box">
-          <a href="">
-            <div class="img-box">
-              <img src="images/slider-img.png" alt="">
-            </div>
-            <div class="detail-box">
-              <h6 class="price">
-                $100
-              </h6>
-              <h6>
-                Chair
-              </h6>
-            </div>
-          </a>
-        </div>
-      </div>
-      <a href="" class="brand-btn">
-        See More
-      </a>
-    </div>
-  </section>
 
-  <!-- end brand section -->
-  <!-- contact section -->
 
-  <section class="contact_section layout_padding">
-    <div class="container ">
-      <div class="heading_container">
-        <h2 class="">
-          Contact Us
-        </h2>
-      </div>
+  
 
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <form action="">
-            <div>
-              <input type="text" placeholder="Name" />
-            </div>
-            <div>
-              <input type="email" placeholder="Email" />
-            </div>
-            <div>
-              <input type="text" placeholder="Phone" />
-            </div>
-            <div>
-              <input type="text" class="message-box" placeholder="Message" />
-            </div>
-            <div class="d-flex ">
-              <button>
-                SEND
-              </button>
-            </div>
-          </form>
-        </div>
-        <div class="col-md-6">
-          <div class="map_container">
-            <div class="map-responsive">
-              <iframe
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Eiffel+Tower+Paris+France"
-                width="600" height="300" frameborder="0" style="border:0; width: 100%; height:100%"
-                allowfullscreen></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- end contact section -->
-
-  <!-- client section -->
-  <section class="client_section layout_padding-bottom">
-    <div class="container">
-      <div class="heading_container">
-        <h2>
-          Testimonial
-        </h2>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="client_container layout_padding2">
-        <div class="client_box b-1">
-          <div class="client-id">
-            <div class="img-box">
-              <img src="images/client-1.png" alt="" />
-            </div>
-            <div class="name">
-              <h5>
-                Magna
-              </h5>
-              <p>
-                Consectetur adipiscing
-              </p>
-            </div>
-          </div>
-          <div class="detail">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrudLorem ipsum
-            </p>
-            <div>
-              <div class="arrow_img">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="client_box b-2">
-          <div class="client-id">
-            <div class="img-box">
-              <img src="images/client-2.png" alt="" />
-            </div>
-            <div class="name">
-              <h5>
-                Aliqua
-              </h5>
-              <p>
-                Consectetur adipiscing
-              </p>
-
-            </div>
-          </div>
-          <div class="detail">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrudLorem ipsum
-            </p>
-            <div>
-              <div class="arrow_img">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- end client section -->
 
  
 
 
-  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-  <script type="text/javascript" src="js/bootstrap.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js">
-  </script>
-  <script type="text/javascript">
-    $(".owl-carousel").owlCarousel({
-      loop: true,
-      margin: 10,
-      nav: true,
-      navText: [],
-      autoplay: true,
-      autoplayHoverPause: true,
-      responsive: {
-        0: {
-          items: 1
-        },
-        420: {
-          items: 2
-        },
-        1000: {
-          items: 5
-        }
-      }
-
-    });
-  </script>
-  <script>
-    var nav = $("#navbarSupportedContent");
-    var btn = $(".custom_menu-btn");
-    btn.click
-    btn.click(function (e) {
-
-      e.preventDefault();
-      nav.toggleClass("lg_nav-toggle");
-      document.querySelector(".custom_menu-btn").classList.toggle("menu_btn-style")
-    });
-  </script>
-  <script>
-    $('.carousel').on('slid.bs.carousel', function () {
-      $(".indicator-2 li").removeClass("active");
-      indicators = $(".carousel-indicators li.active").data("slide-to");
-      a = $(".indicator-2").find("[data-slide-to='" + indicators + "']").addClass("active");
-      console.log(indicators);
-
-    })
-  </script>
-
+  
 </body>
 </body>
 <?php
 include("footer.php");
 ?>
-</html>
+</html>....

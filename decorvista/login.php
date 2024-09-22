@@ -1,3 +1,7 @@
+<?php
+include __DIR__ . '/../connection.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -169,17 +173,17 @@ button:hover {
 <body>
 
   <div class="wrapper ">
-    <form action="#">
+  <form action="login.php" method="POST"> <!-- Ensure the form posts to the same page or correct action -->
       <h2>LOGIN FORM </h2>
       <div class="input-field">
         
-        <input type="text" required>
+      <input type="text" name="email" required> <!-- Added name attribute for email -->
         <label>
             <i class="fas fa-envelope pr-1"></i>
             Enter your email</label>
       </div>
       <div class="input-field">
-        <input type="password" required>
+      <input type="password" name="password" required> <!-- Added name attribute for password -->
         <label>
             <i class="fas fa-lock pr-1"></i>
             Enter your password</label>
@@ -191,9 +195,11 @@ button:hover {
         </label>
         <a href="#">Forgot password?</a>
       </div>
-      <button type="submit">Log In</button>
+      <button type="submit" name="login">Log In</button> <!-- Added name attribute to match POST -->
       <div class="register">
-        <p>Don't have an account? <a href="register.html">Register</a></p>
+        <p>Don't have an account? <a href="register.php">Register</a></p>
+        <p>If You Are A Designer? <a href="designer_register.php">Register as Designer</a></p>
+
       </div>
     </form>
 </div>

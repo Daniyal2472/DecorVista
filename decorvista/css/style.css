@@ -30,6 +30,7 @@ body {
   padding-bottom: 90px;
 }
 
+
 .heading_container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -55,13 +56,57 @@ body {
 }
 
 /*header section*/
+/* Make the header section fixed at the top */
+.header_section {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure it stays above other elements */
+  background-color: #ffffff; /* Set background color for visibility */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility when scrolling */
+}
+
+/* Add padding to the body to prevent content from being hidden behind the fixed navbar */
+body {
+  padding-top: 70px; /* Adjust this value according to your navbar height */
+}
+
+/* Navbar styling */
+.navbar {
+  padding: 10px 20px;
+}
+
+/* Ensure the dropdown stays in front of other content */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1050; /* Higher than other elements */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  min-width: 150px;
+}
+
+.dropdown-toggle::after {
+  content: none;
+}
+
+/* Ensure the dropdown toggle is styled properly */
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  color: black;
+}
+
+/* Styling for hero area to ensure background image doesn't interfere with the dropdown */
 .hero_area {
   height: 100vh;
   background-image: url(../images/hero-bg.jpg);
   background-size: cover;
-  position: relative;
+  background-position: center;
   background-repeat: no-repeat;
-  overflow: hidden;
+  z-index: 1;
 }
 
 .hero_area::after {
@@ -73,55 +118,10 @@ body {
   height: 100%;
   background-image: url(../images/hero-side-bg.png);
   background-size: cover;
+  z-index: 1;
 }
 
-.sub_page .hero_area {
-  height: auto;
-  background-size: auto;
-}
-
-.hero_area.sub_pages {
-  height: auto;
-}
-
-.header_section {
-  overflow-x: hidden;
-}
-
-.header_section .container-fluid {
-  padding-right: 25px;
-  padding-left: 25px;
-}
-
-.header_section .nav_container {
-  margin: 0 auto;
-}
-
-.header_section .user_option {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.header_section .user_option a {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  color: #ffffff;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.header_section .user_option a img {
-  min-width: 20px;
-  height: 20px;
-  margin-right: 5px;
-}
-
+/* Navbar links */
 .custom_nav-container.navbar-expand-lg .navbar-nav .nav-item .nav-link {
   padding: 10px 15px;
   color: #060606;
@@ -129,7 +129,8 @@ body {
   text-transform: uppercase;
 }
 
-.custom_nav-container.navbar-expand-lg .navbar-nav .nav-item.active .nav-link, .custom_nav-container.navbar-expand-lg .navbar-nav .nav-item:hover .nav-link {
+.custom_nav-container.navbar-expand-lg .navbar-nav .nav-item.active .nav-link,
+.custom_nav-container.navbar-expand-lg .navbar-nav .nav-item:hover .nav-link {
   color: #24d278;
 }
 
@@ -147,10 +148,10 @@ a:focus {
 .btn,
 .btn:focus {
   outline: none !important;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
 }
 
+/* Search button styling */
 .custom_nav-container .nav_search-btn {
   background-image: url(../images/search-icon.png);
   background-size: 17px;
@@ -166,26 +167,25 @@ a:focus {
   padding-top: 7px;
 }
 
+/* Navbar brand logo */
 .navbar-brand {
   margin-right: 5%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 
 .navbar-brand img {
   width: 100px;
 }
 
+/* Navbar container */
 .custom_nav-container {
-  z-index: 99999;
+  z-index: 99999; /* Higher z-index to ensure it appears above other elements */
   padding: 0;
   height: 70px;
 }
 
+/* Navbar toggler */
 .custom_nav-container .navbar-toggler {
   outline: none;
 }
@@ -197,6 +197,7 @@ a:focus {
   height: 30px;
 }
 
+/* Login button styling */
 .lg_toggl-btn {
   background-color: transparent;
   border: none;
@@ -206,18 +207,25 @@ a:focus {
   cursor: pointer;
 }
 
+/* Remove the underline and apply font family */
+.login_btn-container a {
+  color: #24d278;
+  text-transform: uppercase;
+  text-decoration: none; /* Removes underline */
+  font-family: 'Montserrat', sans-serif; /* Add your desired font family */
+}
+
+/* Remove focus outline */
 .lg_toggl-btn:focus {
   outline: none;
 }
 
-.login_btn-container {
-  padding-top: 30px;
+/* Optional: Add hover effect to the login button */
+.login_btn-container a:hover {
+  color: #1f9e66; /* Optional hover color */
+  text-decoration: none; /* Ensure underline does not appear on hover */
 }
 
-.login_btn-container a {
-  color: #24d278;
-  text-transform: uppercase;
-}
 
 /*end header section*/
 /* slider section */
@@ -880,6 +888,7 @@ a:focus {
 .info_section {
   background-color: #0f1521;
   color: #ffffff;
+  height: 100%; 
 }
 
 .info_section .info_logo {
@@ -1046,7 +1055,7 @@ a:focus {
   display: block;
   width: 34px;
   height: 3.5px;
-  background-color: #fff;
+  background-color: #000000;
   margin: 8.5px 0;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
@@ -1074,4 +1083,12 @@ a:focus {
           transform: rotate(-45deg) translate(7px, -10px);
 }
 /*# sourceMappingURL=style.css.map */
+
+/* body {
+  background: #222;
+  font-family: "Fira Sans", sans-serif;
+  padding-right: 2rem;
+  margin: 0;
+  overflow-x: hidden;
+} */
 

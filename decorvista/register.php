@@ -1,3 +1,81 @@
+<?php
+include __DIR__ . '/../connection.php';
+
+// Handling form submission
+if (isset($_POST['registerUser'])) {
+    // Get user inputs
+    $firstName = $_POST['first_name'];
+    $lastName = $_POST['last_name'];
+    $userName = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Validate the inputs
+    if (empty($firstName) || empty($lastName) || empty($userName) || empty($email) || empty($password)) {
+        echo "<script>alert('Please fill all fields.');</script>";
+    } else {
+        // Check if the email already exists
+        $stmt = $con->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            echo "<script>alert('Email already registered. Please use another email.');</script>";
+        } else {
+            // Hash the password for security
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+            // Profile Photo Upload Handling
+            if (isset($_FILES['profile_photo']) && $_FILES['profile_photo']['error'] == 0) {
+                $uploadDir = __DIR__ . '/../admin/uploads/';
+                $profilePicsDir = $uploadDir . 'profile_pictures/';
+
+                // Check if directories exist, if not, create them
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                if (!is_dir($profilePicsDir)) {
+                    mkdir($profilePicsDir, 0755, true);
+                }
+
+                $fileName = basename($_FILES['profile_photo']['name']);
+                $targetFile = $profilePicsDir . $fileName;
+
+                // Check if the file is a valid image
+                $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+                $validExtensions = array("jpg", "jpeg", "png", "gif");
+
+                if (in_array($fileType, $validExtensions)) {
+                    if (move_uploaded_file($_FILES['profile_photo']['tmp_name'], $targetFile)) {
+                        $profilePhotoPath = 'admin/uploads/profile_pictures/' . $fileName;
+
+                        // Prepare SQL query to insert the user
+                        $stmt = $con->prepare("INSERT INTO users (first_name, last_name, username, email, password, profile_photo, role) VALUES (?, ?, ?, ?, ?, ?, 'User')");
+                        $stmt->bind_param("ssssss", $firstName, $lastName, $userName, $email, $hashed_password, $fileName);
+
+                        if ($stmt->execute()) {
+                            echo "<script>alert('User registered successfully!'); window.location.href = 'login.php';</script>";
+                        } else {
+                            echo "<script>alert('Error during registration. Please try again later.');</script>";
+                        }
+                    } else {
+                        echo "<script>alert('Error uploading the profile photo.');</script>";
+                    }
+                } else {
+                    echo "<script>alert('Only JPG, JPEG, PNG, and GIF files are allowed.');</script>";
+                }
+            } else {
+                echo "<script>alert('Please upload a profile photo.');</script>";
+            }
+
+            $stmt->close();
+        }
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -163,43 +241,132 @@ button:hover {
   margin-top: 30px;
   color: #000000;
 }
-
+.pr-5 {
+  text-align: left;
+}
 
 </style>
 <body>
   <div class="wrapper">
-    <form action="#">
-      <h2>REGISTER FORM </h2>
+    <form action="register.php" method="POST" id="registerForm" enctype="multipart/form-data">
+      <h2>REGISTER FORM</h2>
+
       <div class="input-field">
-        
-        <input type="text" required>
-        
+        <input type="text" name="first_name" required>
         <label>
-            <i class="fas fa-user pr-1"></i>
-            Enter your Username 
+            <i class="fas fa-user pr-1"></i>Enter your First Name
         </label>
+        <span class="form-text text-danger" id="firstNameError"></span>
       </div>
+
       <div class="input-field">
-        
-        <input type="text" required>
-        
+        <input type="text" name="last_name" required>
         <label>
-            <i class="fas fa-envelope pr-1"></i>
-            Enter your email
+            <i class="fas fa-user pr-1"></i>Enter your Last Name
         </label>
+        <span class="form-text text-danger" id="lastNameError"></span>
       </div>
+
       <div class="input-field">
-        <input type="password" required>
+        <input type="text" name="username" required>
         <label>
-            <i class="fas fa-lock pr-1"></i>
-            Enter your password</label>
+            <i class="fas fa-user pr-1"></i>Enter your Username
+        </label>
+        <span class="form-text text-danger" id="usernameError"></span>
       </div>
-      
-      <button type="submit" class="mt-3">Register</button>
+
+      <div class="input-field">
+        <input type="text" name="email" required>
+        <label>
+            <i class="fas fa-envelope pr-1"></i>Enter your email
+        </label>
+        <span class="form-text text-danger" id="emailError"></span>
+      </div>
+
+      <div class="input-field">
+        <input type="password" name="password" required>
+        <label>
+            <i class="fas fa-lock pr-1"></i>Enter your password
+        </label>
+        <span class="form-text text-danger" id="passwordError"></span>
+      </div>
+
+      <label class="pr-5"><i class="fas fa-user"></i> Profile Photo</label>
+      <div class="input-field">
+        <input type="file" id="profile_photo" name="profile_photo" accept="image/*" required>
+      </div>
+
+      <button type="submit" name="registerUser" class="mt-3">Register</button>
       <div class="register">
-        <p>Do you have an account? <a href="login.html">login</a></p>
+          <p>Do you have an account? <a href="login.php">login</a></p>
       </div>
     </form>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            clearValidationMessages();
+
+            var valid = true;
+
+            // Validate first name
+            var firstName = document.querySelector('input[name="first_name"]');
+            if (firstName.value.trim() === '') {
+                valid = false;
+                document.getElementById('firstNameError').innerText = 'First name is required.';
+            }
+
+            // Validate last name
+            var lastName = document.querySelector('input[name="last_name"]');
+            if (lastName.value.trim() === '') {
+                valid = false;
+                document.getElementById('lastNameError').innerText = 'Last name is required.';
+            }
+
+            // Validate username
+            var username = document.querySelector('input[name="username"]');
+            if (username.value.trim() === '') {
+                valid = false;
+                document.getElementById('usernameError').innerText = 'Username is required.';
+            }
+
+            // Validate email
+            var email = document.querySelector('input[name="email"]');
+            if (email.value.trim() === '') {
+                valid = false;
+                document.getElementById('emailError').innerText = 'Email is required.';
+            } else if (!validateEmail(email.value.trim())) {
+                valid = false;
+                document.getElementById('emailError').innerText = 'Please enter a valid email.';
+            }
+
+            // Validate password
+            var password = document.querySelector('input[name="password"]');
+            if (password.value.trim() === '') {
+                valid = false;
+                document.getElementById('passwordError').innerText = 'Password is required.';
+            } else if (password.value.length < 8) {
+                valid = false;
+                document.getElementById('passwordError').innerText = 'Password must be at least 8 characters.';
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+
+        function validateEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function clearValidationMessages() {
+            var messages = document.querySelectorAll('.form-text.text-danger');
+            messages.forEach(function(message) {
+                message.innerText = '';
+            });
+        }
+    </script>
+
   </div>
 </body>
 </html>
